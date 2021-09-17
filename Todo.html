@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .checkboxStyle {
+            text-decoration: line-through
+        }
+
+        .block {
+            display: block;
+        }
+
+        .none {
+            display: none
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <div style="margin:auto">
+        <input type="checkbox" class="checkboxAll"> <input type="text" name="" id="InputTask" placeholder="请输入你的任务" />
+        <ul id="ul" style="list-style-type:none;">
+            <!-- <li><input type="checkbox" class="checkbox"> 一个任务</li>
+            <li><input type="checkbox" class="checkbox"> 一个任务</li>
+            <li><input type="checkbox" class="checkbox"> 一个任务</li>
+            <li><input type="checkbox" class="checkbox"> 一个任务</li> -->
+        </ul>
+        <div>
+            <span id="number"> 0 items left</span>
+            <button onclick="All()">All</button>
+            <button onclick="Active()">Active</button>
+            <button onclick="Completed()">Completed</button>
+            <button onclick="DeleteDom()">删除</button>
+        </div>
+
+    </div>
+
+</body>
+<script src="./jquery-3.1.1.min.js"></script>
+<script>
+    // 添加
+    $("#InputTask").keydown(function (e) {
+        if (e.keyCode == 13) {
+            var InputTask = $("#InputTask").val()
+            console.log(InputTask)
+            var ul = document.getElementsByTagName("ul")[0]
+            var li = document.createElement("li")
+            li.innerHTML = `<input type="checkbox" class = "checkbox"> ${InputTask}`
+            ul.appendChild(li)
+            $("#InputTask").val("");
+        }
+        LocalStrangeBytes()
+    })
+
+    // 全选反选
+    $(".checkboxAll").click(function () {
+        var checkbox = document.getElementsByClassName("checkbox")
+        var checkboxAll = document.getElementsByClassName("checkboxAll")[0]
+        // console.log(checkboxAll.checked)
+        for (var i = 0; i < checkbox.length; i++) {
+            checkbox[i].checked = checkboxAll.checked
+        }
+        AddClassStyle()
+        MunberChange()
+    })
+
+    $("ul").on("click", "li", function () {
+        var checkbox = document.getElementsByClassName("checkbox")
+        var checkboxAll = document.getElementsByClassName("checkboxAll")[0]
+        var count = 0;
+        for (var i = 0; i < checkbox.length; i++) {
+            // console.log(checkbox[i].checked)
+            if (checkbox[i].checked == true) {
+                count++
+            }
+        }
+        // console.log(count)
+        if (count == checkbox.length) {
+            checkboxAll.checked = true
+        } else {
+            checkboxAll.checked = false
+        }
+        AddClassStyle()
+        MunberChange()
+    })
+
+    // 删除选中的
+    function DeleteDom() {
+        var checkbox = document.getElementsByClassName("checkbox")
+        var checkboxAll = document.getElementsByClassName("checkboxAll")[0]
+        var count = checkbox.length;
+        for (var i = 0; i < checkbox.length; i++) {
+            if (checkbox[i].checked == true) {
+                checkbox[i].parentNode.parentNode.removeChild(checkbox[i].parentNode);
+                i--;
+                count--;
+            }
+        }
+        if (count == 0) {
+            checkboxAll.checked = false
+        }
+        MunberChange()
+    }
+
+    // 更新数字
+    function MunberChange() {
+        var number = document.getElementById("number")
+        var checkbox = document.getElementsByClassName("checkbox")
+        var count = 0;
+        for (var i = 0; i < checkbox.length; i++) {
+            // console.log(checkbox[i].checked)
+            if (checkbox[i].checked == true) {
+                count++
+            }
+        }
+        number.innerText = `${count} items left`
+    }
+
+    // 给元素增加选中效果
+    function AddClassStyle() {
+        var checkbox = document.getElementsByClassName("checkbox")
+        for (var i = 0; i < checkbox.length; i++) {
+            // console.log(checkbox[i].checked)
+            if (checkbox[i].checked == true) {
+                checkbox[i].parentNode.classList.add("checkboxStyle")
+            } else {
+                checkbox[i].parentNode.classList.remove("checkboxStyle")
+            }
+        }
+    }
+
+    // 未完成的
+    function Active() {
+        var checkbox = document.getElementsByClassName("checkbox")
+        for (var i = 0; i < checkbox.length; i++) {
+            // console.log(checkbox[i].checked)
+            if (checkbox[i].checked == true) {
+                checkbox[i].parentNode.classList.add("none")
+            } else {
+                checkbox[i].parentNode.classList.remove("none")
+            }
+        }
+    }
+
+    // 已经完成的
+    function Completed() {
+        var checkbox = document.getElementsByClassName("checkbox")
+        for (var i = 0; i < checkbox.length; i++) {
+            // console.log(checkbox[i].checked)
+            if (checkbox[i].checked == false) {
+                checkbox[i].parentNode.classList.add("none")
+            } else {
+                checkbox[i].parentNode.classList.remove("none")
+            }
+        }
+    }
+
+    // 所有的
+    function All() {
+        var checkbox = document.getElementsByClassName("checkbox")
+        for (var i = 0; i < checkbox.length; i++) {
+            // console.log(checkbox[i].checked)
+            checkbox[i].parentNode.classList.remove("none")
+
+        }
+    }
+
+    // 将ul内的内容存到缓存中
+    function LocalStrangeBytes() {
+        var ul = document.getElementById("ul").innerHTML
+        localStorage.setItem("ul",ul)
+    }
+    LocalStrangeBytes() 
+    $(function(){
+        var li = localStorage.getItem("ul")
+        var ul = document.getElementById("ul")
+        ul.innerHTML = li
+    })
+</script>
+
+</html>
