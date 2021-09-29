@@ -1,4 +1,4 @@
 # js-todomvc
 todomvc
 
-JDBC的练习demo 
+Springboot的练习demo 
